@@ -10,13 +10,18 @@ import mesosphere.marathon.StorageException
 import mesosphere.util.LockManager
 import mesosphere.util.{ ThreadPoolContext, BackToTheFuture }
 import org.slf4j.LoggerFactory
+import mesosphere.marathon.MarathonConf
+import scala.concurrent.duration._
+import mesosphere.util.BackToTheFuture
 
 class MarathonStore[S <: MarathonState[_, S]](
+  conf: MarathonConf,
   state: State,
   registry: MetricRegistry,
   newState: () => S,
   prefix: String = "app:")(
-    implicit val timeout: BackToTheFuture.Timeout = BackToTheFuture.Implicits.defaultTimeout)
+    implicit val timeout: BackToTheFuture.Timeout = BackToTheFuture.Timeout(Duration(conf.marathonStoreTimeout(),
+      MILLISECONDS)))
     extends PersistenceStore[S] {
 
   import ThreadPoolContext.context

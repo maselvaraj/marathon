@@ -29,7 +29,8 @@ class InfoResource @Inject() (
     "task_launch_timeout" -> conf.taskLaunchTimeout.get,
     "reconciliation_initial_delay" -> conf.reconciliationInitialDelay.get,
     "reconciliation_interval" -> conf.reconciliationInterval.get,
-    "mesos_user" -> conf.mesosUser.get)
+    "mesos_user" -> conf.mesosUser.get,
+    "marathon_store_timeout" -> conf.marathonStoreTimeout.get)
 
   // Zookeeper congiurations
   private[this] lazy val zookeeperConfigValues = Map(

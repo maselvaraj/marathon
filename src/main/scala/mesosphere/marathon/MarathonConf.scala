@@ -66,6 +66,11 @@ trait MarathonConf extends ScallopConf with ZookeeperConf {
       "reconciliation operations.",
     default = Some(30000L)) // 30 seconds
 
+  lazy val marathonStoreTimeout = opt[Long]("marathon_store_timeout",
+    descr = "Time, in milliseconds, to wait for a task to store " +
+      "in marathon",
+    default = Some(2000L)) // 2 seconds
+
   lazy val executorHealthChecks = opt[Boolean]("executor_health_checks",
     descr = "If enabled, health checks are performed by the executor " +
       "instead of the Marathon scheduler.  This feature requires Mesos 0.20+",
