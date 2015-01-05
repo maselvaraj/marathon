@@ -159,6 +159,24 @@ class AppsResource @Inject() (
     }
   }
 
+  @GET
+  @Path("{id:.+}/refresh")
+  @Timed
+  def refresh(@Context req: HttpServletRequest,
+              @PathParam("id") id: String,
+              @DefaultValue("false")@QueryParam("force") force: Boolean,
+              body: Array[Byte]): Response = {
+    // prefer the id from the AppUpdate over that in the UI
+    val appId = id.toRootPath
+
+    service.getApp(appId) match {
+      case Some(app) =>
+        val deployment = result(groupManager.updateApp(appId, _ => app, app.version, force))
+        deploymentResult(deployment)
+      case None => unknownApp(appId)
+    }
+  }
+
   @PUT
   @Timed
   def replaceMultiple(@DefaultValue("false")@QueryParam("force") force: Boolean, body: Array[Byte]): Response = {
